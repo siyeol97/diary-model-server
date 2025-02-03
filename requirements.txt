@@ -1,0 +1,6 @@
+Flask
+numpy
+librosa
+parselmouth
+tensorflow
+werkzeug
