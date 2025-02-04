@@ -14,5 +14,7 @@ mkdir -p $INSTALL_DIR
 cp ffmpeg-*/ffmpeg $INSTALL_DIR/ffmpeg
 chmod +x $INSTALL_DIR/ffmpeg
 
+export PATH=$PATH:/opt/bin
+
 # FFmpeg 경로 확인
 echo "FFmpeg installed at $INSTALL_DIR/ffmpeg"
