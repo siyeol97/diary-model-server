@@ -1,18 +1,12 @@
 #!/bin/bash
 
-# ffmpeg 다운로드 및 압축 해제
-wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz -O ffmpeg.tar.xz
+# FFmpeg 다운로드 및 압축 해제
+curl -L -o ffmpeg.tar.xz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-i686-static.tar.xz
 tar -xf ffmpeg.tar.xz
 
-# ffmpeg 바이너리를 /opt/bin으로 이동
-mkdir -p /opt/bin
+# FFmpeg 바이너리를 특정 경로로 이동
 cp ffmpeg-*/ffmpeg /opt/bin/ffmpeg
-
-# 실행 권한 부여
 chmod +x /opt/bin/ffmpeg
 
-# ffmpeg를 pydub에서 사용할 수 있도록 경로 설정
-export PATH="/opt/bin:$PATH"
-
-# 확인 메시지
+# FFmpeg 경로 확인
 echo "FFmpeg installed at /opt/bin/ffmpeg"
