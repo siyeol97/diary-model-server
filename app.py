@@ -16,7 +16,7 @@ depress_model = init_depress_model()
 
 # ffmpeg 경로 설정
 #AudioSegment.converter = which("ffmpeg")
-AudioSegment.converter = "/opt/bin/ffmpeg"
+AudioSegment.ffmpeg = "/opt/bin/ffmpeg"
 
 # URL로부터 오디오 파일을 가져오는 함수
 def get_audio_from_url(url):
