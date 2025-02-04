@@ -7,16 +7,14 @@ import requests
 import os
 import io
 from pydub import AudioSegment
-#from shutil import which
-
+from shutil import which
 
 app = Flask(__name__)
 
 depress_model = init_depress_model()
 
 # ffmpeg 경로 설정
-#AudioSegment.converter = which("ffmpeg")
-AudioSegment.ffmpeg = "/opt/bin/ffmpeg"
+AudioSegment.converter = which("ffmpeg")
 
 # URL로부터 오디오 파일을 가져오는 함수
 def get_audio_from_url(url):
@@ -84,7 +82,7 @@ def upload():
         depress_label, sigmoid_value = predict_audio_depress(wav_audio)
 
         # 결과 반환
-        return jsonify({"depress": depress_label, "sigmoid_value": sigmoid_value.tolist()})
+        return jsonify({"depress": depress_label, "sigmoid_value": sigmoid_value.tolist()[0][0]})
 
     else:
         response = make_response("This is a GET request.")
