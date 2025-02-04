@@ -37,6 +37,6 @@ def init_depress_model():
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     # 음성 우울감 예측 가중치 로드
-    model.load_weights("/audio_depress_model3.h5")
+    model.load_weights("./audio_depress_model.h5")
 
     return model

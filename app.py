@@ -4,8 +4,10 @@ from init_depress_model import init_depress_model
 from  split_audio import split_audio
 from extract_features import extract_features
 import requests
+import os
 import io
 import librosa
+from pydub import AudioSegment
 
 app = Flask(__name__)
 
@@ -18,13 +20,26 @@ def get_audio_from_url(url):
         return io.BytesIO(response.content)
     return None
 
+# webm 또는 mp4 파일을 wav 파일로 변환하는 함수
+def convert_audio_to_wav(audio_file, file_format):
+    # webm 또는 mp4 둘 다 대응 가능
+    audio = AudioSegment.from_file(audio_file, format=file_format)
+    
+    # WAV 변환
+    wav_io = io.BytesIO()
+    audio.export(wav_io, format="wav")
+    wav_io.seek(0)
+
+    return wav_io
+
 # 음성 우울감 예측 함수
 def predict_audio_depress(user_audio):
     features = [] 
     audio_chunks = split_audio(user_audio)
+
     for i in range(len(audio_chunks)):
         features.append(extract_features(audio_chunks[i]))
-    
+
     prediction_sum = 0
     for i in range(len(features)):
         # Reshape the feature to match the input shape that model expects
@@ -55,14 +70,16 @@ def upload():
 
         if audio_file is None:
             return jsonify({"error": "Failed to fetch audio file"}), 400
-
-        # librosa로 로드하여 waveform 데이터 가져오기
-        user_audio = librosa.load(audio_file, sr=44100)
+        
+        # 확장자 추출 ('.mp4' 또는 '.webm' 감지)
+        file_extension = os.path.splitext(audio_url)[-1].lower().replace(".", "")
+        wav_audio = convert_audio_to_wav(audio_file, file_extension)
 
         # 감정 분석 수행
-        depress_label, sigmoid_value = predict_audio_depress(user_audio)
+        depress_label, sigmoid_value = predict_audio_depress(wav_audio)
 
-        return jsonify({"depress": depress_label, "sigmoid_value": sigmoid_value})
+        # 결과 반환
+        return jsonify({"depress": depress_label, "sigmoid_value": sigmoid_value.tolist()})
 
     else:
         response = make_response("This is a GET request.")
