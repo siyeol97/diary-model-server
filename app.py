@@ -7,13 +7,15 @@ import requests
 import os
 import io
 from pydub import AudioSegment
+from shutil import which
+
 
 app = Flask(__name__)
 
 depress_model = init_depress_model()
 
 # ffmpeg 경로 설정
-AudioSegment.converter = "/tmp/ffmpeg"
+AudioSegment.converter = which("ffmpeg")
 
 # URL로부터 오디오 파일을 가져오는 함수
 def get_audio_from_url(url):
