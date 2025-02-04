@@ -6,12 +6,15 @@ from extract_features import extract_features
 import requests
 import os
 import io
-import librosa
+from shutil import which
 from pydub import AudioSegment
 
 app = Flask(__name__)
 
 depress_model = init_depress_model()
+
+# ffmpeg 경로 설정
+AudioSegment.converter = which("ffmpeg")
 
 # URL로부터 오디오 파일을 가져오는 함수
 def get_audio_from_url(url):
