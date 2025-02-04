@@ -4,9 +4,15 @@
 curl -L -o ffmpeg.tar.xz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-i686-static.tar.xz
 tar -xf ffmpeg.tar.xz
 
-# FFmpeg 바이너리를 특정 경로로 이동
-cp ffmpeg-*/ffmpeg /opt/bin/ffmpeg
-chmod +x /opt/bin/ffmpeg
+# FFmpeg 설치 경로 설정
+INSTALL_DIR="/opt/bin"
+
+# 설치 경로가 없으면 생성
+mkdir -p $INSTALL_DIR
+
+# FFmpeg 바이너리를 해당 경로로 이동
+cp ffmpeg-*/ffmpeg $INSTALL_DIR/ffmpeg
+chmod +x $INSTALL_DIR/ffmpeg
 
 # FFmpeg 경로 확인
-echo "FFmpeg installed at /opt/bin/ffmpeg"
+echo "FFmpeg installed at $INSTALL_DIR/ffmpeg"
