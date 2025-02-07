@@ -6,15 +6,10 @@ from extract_features import extract_features
 import requests
 import os
 import io
-from pydub import AudioSegment
-from shutil import which
 
 app = Flask(__name__)
 
 depress_model = init_depress_model()
-
-# ffmpeg 경로 설정
-AudioSegment.converter = which("ffmpeg")
 
 # URL로부터 오디오 파일을 가져오는 함수
 def get_audio_from_url(url):
@@ -22,18 +17,6 @@ def get_audio_from_url(url):
     if response.status_code == 200:
         return io.BytesIO(response.content)
     return None
-
-# webm 또는 mp4 파일을 wav 파일로 변환하는 함수
-def convert_audio_to_wav(audio_file, file_format):
-    # webm 또는 mp4 둘 다 대응 가능
-    audio = AudioSegment.from_file(audio_file, format=file_format)
-    
-    # WAV 변환
-    wav_io = io.BytesIO()
-    audio.export(wav_io, format="wav")
-    wav_io.seek(0)
-
-    return wav_io
 
 # 음성 우울감 예측 함수
 def predict_audio_depress(user_audio):
@@ -73,13 +56,9 @@ def upload():
 
         if audio_file is None:
             return jsonify({"error": "Failed to fetch audio file"}), 400
-        
-        # 확장자 추출 ('.mp4' 또는 '.webm' 감지)
-        file_extension = os.path.splitext(audio_url)[-1].lower().replace(".", "")
-        wav_audio = convert_audio_to_wav(audio_file, file_extension)
 
         # 감정 분석 수행
-        depress_label, sigmoid_value = predict_audio_depress(wav_audio)
+        depress_label, sigmoid_value = predict_audio_depress(audio_file)
 
         # 결과 반환
         return jsonify({"depress": depress_label, "sigmoid_value": sigmoid_value.tolist()[0][0]})
