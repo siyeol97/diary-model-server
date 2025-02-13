@@ -2,6 +2,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, BatchNormalization, MaxPooling2D, Dropout, Flatten, Dense
 
 def init_depress_model():
+    print(f'\nLoading audio depression model')
     model = Sequential()
 
     # 1. conv block
@@ -38,5 +39,7 @@ def init_depress_model():
 
     # 음성 우울감 예측 가중치 로드
     model.load_weights("./audio_depress_model.h5")
+
+    print(f'Model loaded\n')
 
     return model
