@@ -5,6 +5,8 @@ def split_audio(filename, chunk_length=5):
     # Load the audio file
     y, sr = librosa.load(filename, sr=44100)
 
+    print(f'2. librosa loaded')
+
     # Calculate the number of 1-minute chunks
     total_length = librosa.get_duration(y=y, sr=sr)
     num_chunks = int(total_length / chunk_length)

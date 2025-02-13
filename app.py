@@ -23,6 +23,8 @@ def predict_audio_depress(user_audio):
     features = [] 
     audio_chunks = split_audio(user_audio)
 
+    print(f'3. Number of audio chunks: {len(audio_chunks)}')
+
     for i in range(len(audio_chunks)):
         features.append(extract_features(audio_chunks[i]))
 
@@ -54,11 +56,15 @@ def upload():
         audio_url = data["url"]
         audio_file = get_audio_from_url(audio_url)
 
+        print(f'\n1. audio_file loaded: {audio_file}')
+
         if audio_file is None:
             return jsonify({"error": "Failed to fetch audio file"}), 400
 
         # 감정 분석 수행
         depress_label, sigmoid_value = predict_audio_depress(audio_file)
+
+        print(f'6. Predict completed')
 
         # 결과 반환
         return jsonify({"depress": depress_label, "sigmoid_value": sigmoid_value.tolist()[0][0]})
