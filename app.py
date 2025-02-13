@@ -3,9 +3,11 @@ from flask import Flask, request, jsonify, make_response
 from init_depress_model import init_depress_model
 from  split_audio import split_audio
 from extract_features import extract_features
+from log_resource_usage import log_resource_usage
 import requests
 import os
 import io
+
 
 app = Flask(__name__)
 
@@ -23,11 +25,13 @@ def predict_audio_depress(user_audio):
     features = [] 
     audio_chunks = split_audio(user_audio)
 
+    log_resource_usage('after split_audio')
     print(f'3. Number of audio chunks: {len(audio_chunks)}')
 
     for i in range(len(audio_chunks)):
         features.append(extract_features(audio_chunks[i]))
     
+    log_resource_usage('after extract_features')
     print(f'4. Features extracted')
 
     prediction_sum = 0
@@ -67,6 +71,7 @@ def upload():
         # 감정 분석 수행
         depress_label, sigmoid_value = predict_audio_depress(audio_file)
 
+        log_resource_usage('after prediction')
         print(f'5. Predict completed\n')
 
         # 결과 반환

@@ -1,10 +1,12 @@
 import librosa
 import numpy as np
+from log_resource_usage import log_resource_usage
 
 def split_audio(filename, chunk_length=5):
     # Load the audio file
     y, sr = librosa.load(filename, sr=44100)
 
+    log_resource_usage('after loading librosa')
     print(f'2. librosa loaded')
 
     # Calculate the number of 1-minute chunks
