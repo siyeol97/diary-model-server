@@ -13,13 +13,6 @@ app = Flask(__name__)
 
 depress_model = init_depress_model()
 
-# URL로부터 오디오 파일을 가져오는 함수
-def get_audio_from_url(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        return io.BytesIO(response.content)
-    return None
-
 # 음성 우울감 예측 함수
 def predict_audio_depress(user_audio):
     features = [] 
@@ -55,14 +48,10 @@ def predict_audio_depress(user_audio):
 @app.route("/", methods=["GET", "POST"])
 def upload():
     if request.method == "POST":
-        data = request.get_json()
-        
-        if not data or "url" not in data:
-            return jsonify({"error": "No audio URL found"}), 400
-
-        audio_url = data["url"]
-        audio_file = get_audio_from_url(audio_url)
-
+        if not request.data:
+            return jsonify({"error": "No file data found"}), 400
+    
+        audio_file = io.BytesIO(request.data)
         print(f'\n1. audio_file loaded: {audio_file}')
 
         if audio_file is None:
@@ -72,7 +61,7 @@ def upload():
         depress_label, sigmoid_value = predict_audio_depress(audio_file)
 
         log_resource_usage('after prediction')
-        print(f'5. Predict completed\n')
+        print(f'5. Predict completed {depress_label}, {sigmoid_value.tolist()[0][0]}\n')
 
         # 결과 반환
         return jsonify({"depress": depress_label, "sigmoid_value": sigmoid_value.tolist()[0][0]})
