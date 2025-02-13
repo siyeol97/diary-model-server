@@ -18,14 +18,12 @@ def extract_features(audio_file):
 
     # Extract MFCC features
     mfccs = librosa.feature.mfcc(y=y_pre, win_length = win_length , sr=sr, n_mfcc=n_mfcc, n_mels=n_mels, n_fft=n_fft, hop_length=hop_length, window=window)
-    print(f'4. MFCCs loaded')
     # Extract Mel Spectrogram features
     mel_spectrogram = librosa.feature.melspectrogram(y=y_pre, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels, window=window, win_length=win_length)
     mel_spectrogram_db = librosa.power_to_db(mel_spectrogram)
 
     # Load audio file with Parselmouth
     sound = parselmouth.Sound(audio_file)
-    print(f'5. Parselmouth sound loaded')
 
     # Extract pitch
     pitch = sound.to_pitch(time_step=hop_length/sr)
