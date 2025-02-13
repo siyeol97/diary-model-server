@@ -4,7 +4,6 @@ from init_depress_model import init_depress_model
 from  split_audio import split_audio
 from extract_features import extract_features
 from log_resource_usage import log_resource_usage
-import requests
 import os
 import io
 
@@ -45,7 +44,7 @@ def predict_audio_depress(user_audio):
     return (dep_dict[predicted_class.item()], sigmoid_value)
 
 # API 엔드포인트 (POST 요청)
-@app.route("/", methods=["GET", "POST"])
+@app.route("/voice-depress", methods=["GET", "POST"])
 def upload():
     if request.method == "POST":
         if not request.data:
