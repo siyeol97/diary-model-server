@@ -1,6 +1,5 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, BatchNormalization, MaxPooling2D, Dropout, Flatten, Dense
-from memory_profiler import profile
 
 def init_depress_model():
     print(f'\nLoading audio depression model')
