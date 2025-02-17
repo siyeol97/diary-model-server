@@ -2,14 +2,13 @@ import librosa
 import numpy as np
 from log_resource_usage import log_resource_usage
 
-def split_audio(filename, chunk_length=5):
+def split_audio_depression(filename, chunk_length=5):
     # Load the audio file
     y, sr = librosa.load(filename, sr=44100)
 
     log_resource_usage('after loading librosa')
-    print(f'2. librosa loaded')
+    print(f'librosa loaded - audio_depression')
 
-    # Calculate the number of 1-minute chunks
     total_length = librosa.get_duration(y=y, sr=sr)
     num_chunks = int(total_length / chunk_length)
 
@@ -21,7 +20,6 @@ def split_audio(filename, chunk_length=5):
         audio_chunk = y[start:end]
         audio_chunks.append(audio_chunk)
 
-    # If there are any leftovers, pad and add them as well
     if total_length > chunk_length * num_chunks:
         start = num_chunks * chunk_length * sr
         audio_chunk = np.pad(y[start:], (0, start + chunk_length * sr - len(y)))
