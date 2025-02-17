@@ -1,7 +1,7 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, BatchNormalization, MaxPooling2D, Dropout, Flatten, Dense
 
-def init_depress_model():
+def init_voice_depression_model():
     print(f'\nLoading audio depression model')
     model = Sequential()
 
@@ -38,7 +38,7 @@ def init_depress_model():
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     # 음성 우울감 예측 가중치 로드
-    model.load_weights("./audio_depress_model.h5")
+    model.load_weights("./audio_depression_model.h5")
 
     print(f'Model loaded\n')
 
